@@ -10,6 +10,8 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans&amp;family=Tilt+Warp&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
 <!-- Google tag (gtag.js) -->
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-65LTDNTZ16"></script>
 <script>
@@ -44,150 +46,297 @@
 </button>
 <div class="nav-backdrop" hidden></div>
 <nav id="site-nav">
-  <a href="../about/index.html">ABOUT</a>
-  <a href="../vex/index.html">VEX</a>
+  <a href="../about/index.html">ABOUT US</a>
+  <a href="../ourteam/index.html">OUR TEAM</a>
   <a href="../projects/index.html">PROJECTS</a>
-  <a href="../support/index.html">SUPPORT</a>
+  <a href="../support/index.html">SUPPORT US!</a>
 </nav>
 </header>
 <!-- HERO 1 -->
-<section class="hero-1">
-<div class="hero-text">FOUNDED BY COMPETITORS</div>
-<div class="subhead">
-<p>See how we’re empowering the next generation of engineers through collaboration, resource-sharing, and mutual growth.</p>
-<a class="btn-img" href="../about/index.html">
-<img alt="Learn More" src="../images/Learnmore.png"/>
-</a>
-</div>
+<section class="hero-1 hero-split">
+  <div class="hero-main">
+    <div class="hero-text">FOUNDED BY COMPETITORS FOR COMPETITORS</div>
+
+    <div class="subhead">
+      <p>See how we’re empowering the next generation of engineers through collaboration, resource-sharing, and mutual growth.</p>
+      <a class="btn-img" href="../about/index.html">
+        <img alt="Learn More" src="../images/Learnmore.png"/>
+      </a>
+    </div>
+  </div>
+
+  <aside class="discord-panel" aria-label="Newsletter updates">
+    <h3>Newsletter</h3>
+    <div id="discord-announcements" class="discord-announcements">Loading…</div>
+  </aside>
+
+<script>
+  function escapeHtml(str) {
+    return String(str)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function stripMediaUrls(text) {
+    return String(text)
+      // remove direct image URLs
+      .replace(/https?:\/\/\S+\.(png|jpe?g|gif|webp)(\?\S*)?/gi, "")
+      // remove direct video URLs
+      .replace(/https?:\/\/\S+\.(mp4|webm|mov)(\?\S*)?/gi, "")
+      // remove common gif-host links that you embed anyway (Tenor/Giphy)
+      .replace(/https?:\/\/(www\.)?(tenor\.com|giphy\.com)\S*/gi, "")
+      .trim();
+  }
+
+  function linkify(text) {
+    const urlRe = /(https?:\/\/[^\s]+)/g;
+
+    return String(text).replace(urlRe, (url) => {
+      // If URL looks like an image, do NOT turn it into a link
+      if (/\.(png|jpe?g|gif|webp)(\?|$)/i.test(url)) {
+        return url; // leave as plain text (or remove entirely if you prefer)
+      }
+
+      const safeUrl = escapeHtml(url);
+      return `<a href="${safeUrl}" target="_blank" rel="noopener">${safeUrl}</a>`;
+    });
+  }
+
+  async function loadDiscordAnnouncements() {
+    const box = document.getElementById("discord-announcements");
+    box.textContent = "Loading…";
+
+    try {
+      // If the page is NOT being served by the Express app, call the API explicitly on :3000
+      const usingExpress = window.location.port === "3000";
+      const apiBase = window.location.origin;
+      const apiUrl = `${apiBase}/api/announcements`;
+
+      const r = await fetch(apiUrl, { cache: "no-store" });
+      if (!r.ok) throw new Error(`API error ${r.status}`);
+
+      const items = await r.json();
+
+      if (!Array.isArray(items) || items.length === 0) {
+        box.textContent = "No announcements yet.";
+        return;
+      }
+
+      box.innerHTML = items.map(m => {
+        const cleanText = stripMediaUrls(m.content || "");
+        const content = linkify(escapeHtml(cleanText));
+
+        // Your API timestamps have 6-digit fractional seconds; normalize for safe parsing
+        const ts = String(m.timestamp || "").replace(/\.\d+/, "");
+        const time = new Date(ts).toLocaleString();
+
+        const media = Array.isArray(m.media) ? m.media : [];
+        const mediaHtml = media.length ? `
+          <div class="discord-images">
+          ${media.map((m) => {
+            const safe = escapeHtml(m.url);
+
+            if (m.type === "file") {
+              const fileName = escapeHtml(m.name || m.url.split("/").pop() || "Download file");
+              return `
+                <a class="discord-file" href="${safe}" target="_blank" rel="noopener">
+                  📄 ${fileName}
+                </a>
+              `;
+            }
+
+            // VIDEOS
+            if (m.type === "video") {
+              const isGifVideo = /\.(mp4|webm)/i.test(safe) &&
+                                /(tenor|giphy|discord)/i.test(safe);
+
+              // Treat "GIF videos" like GIFs
+              if (isGifVideo) {
+                return `
+                  <video
+                    class="discord-gif-video"
+                    src="${safe}"
+                    autoplay
+                    loop
+                    muted
+                    playsinline>
+                  </video>
+                `;
+              }
+
+              // Normal videos
+              return `
+                <video
+                  class="discord-video"
+                  src="${safe}"
+                  controls
+                  playsinline
+                  preload="metadata">
+                </video>
+              `;
+            }
+
+            // GIFS → real GIF behavior (no video tag)
+            if (m.type === "gif") {
+              return `
+                <img
+                  class="discord-gif"
+                  src="${safe}"
+                  loading="lazy"
+                  alt="">
+              `;
+            }
+
+            // STATIC IMAGES
+            return `
+              <img
+                class="discord-img"
+                src="${safe}"
+                loading="lazy"
+                alt="">
+            `;
+          }).join("")}
+          </div>
+        ` : "";
+
+        return `
+          <div class="discord-post">
+            ${content ? `<p class="discord-text">${content}</p>` : ""}
+            ${mediaHtml}
+            <small class="discord-time">${escapeHtml(time)}</small>
+          </div>
+        `;
+      }).join("");
+
+    } catch (e) {
+      box.textContent = "Could not load announcements.";
+      console.error("Announcements load failed:", e);
+    }
+  }
+
+  loadDiscordAnnouncements();
+</script>
+
 </section>
+<div class="stats-gradient"></div>
 <!-- STATS BAR IMAGE -->
 <div style="text-align:center; margin:4rem 0;">
 <a class="stats-btn" href="../projects/index.html">
 <img alt="See our projects" src="../images/Statsbar.png"/>
 </a>
 </div>
+<div class="stats-gradient"></div>
 <!-- HERO 2 + ABOUT -->
 <section class="hero-2">
 <div class="about">
 <div class="inner">
 <h2>SOCAL ALLIANCE</h2>
-<p>SoCal Alliance was founded in 2023 after a simple act of generosity—one team lending spare parts to another at a critical moment—which blossomed into a community grounded in mutual respect and shared innovation.</p>
-<p>Today, over 180 members strong, we unite passionate VEX Robotics teams for high-level performance, collective learning, and groundbreaking ideas, all while supporting each other every step of the way.</p>
-<p>I’m proud to serve as part of the SCA Nonprofit Initiative and look forward to empowering teams within and beyond our network.</p>
-<div class="founder">
-<div class="photo"></div>
-<div>
-<div class="signature"></div>
-<div class="name">Winston Lin • SoCal Alliance Founder</div>
-</div>
-</div>
-</div>
-</div>
+<p>Our organization was founded in 2022 after a seemingly inconsequential act: one team sharing a few spare parts with another during a critical point in a competition. What initially appeared to be a simple act of generosity became the foundation for a growing community grounded in respect and collaboration.</p>
+<p>Now over 180 members strong, SoCal Alliance unites passionate VEX Robotics teams and individuals committed to high-level performance, shared learning, and collective innovation–all while supporting one another along the way.</p>
+<p>Our aim is to make VEX knowledge easier to access. Most of us learned through other students, so we share what we’ve learned to make robotics more welcoming, inclusive, and educational for everyone.</p>
+<p>Today, we are proud to be part of the SCA Nonprofit Initiative, and we am excited to explore new ways to uplift and empower teams within and beyond our network.</p>
 </section>
+<div class="stats-gradient"></div>
 <section class="sponsor-carousel-section">
-<h2 class="carousel-title">OUR SPONSORS</h2>
+<h2 class="carousel-title">OUR PARTNERS</h2>
 <div class="sponsor-marquee">
   <div class="sponsor-viewport">
     <ul class="marquee" id="sponsorTrack">
-<!-- DUPLICATE 6 TIMES -->
 <li>
-<a class="sponsor-logo tier-pink" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
+<a class="sponsor-logo tier-pink" href="https://polymaker.com/" rel="noopener" target="_blank">
+<img alt="Polymaker" src="images/Polymaker-Logo.png"/>
+</a>
+</li>
+<li>
+<a class="sponsor-logo tier-gold" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
 <img alt="McBride" src="images/McBride-Logo.png"/>
 </a>
 </li>
-<!-- DUPLICATE 6 TIMES -->
+<!-- Repeats go here-->
 <li>
-<a class="sponsor-logo tier-pink" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
-<img alt="McBride" src="images/McBride-Logo.png"/>
+<a class="sponsor-logo tier-pink" href="https://polymaker.com/" rel="noopener" target="_blank">
+<img alt="Polymaker" src="images/Polymaker-Logo.png"/>
 </a>
-</li><!-- DUPLICATE 6 TIMES -->
+</li>
 <li>
-<a class="sponsor-logo tier-pink" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
-<img alt="McBride" src="images/McBride-Logo.png"/>
-</a>
-</li><!-- DUPLICATE 6 TIMES -->
-<li>
-<a class="sponsor-logo tier-pink" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
-<img alt="McBride" src="images/McBride-Logo.png"/>
-</a>
-</li><!-- DUPLICATE 6 TIMES -->
-<li>
-<a class="sponsor-logo tier-pink" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
-<img alt="McBride" src="images/McBride-Logo.png"/>
-</a>
-</li><!-- DUPLICATE 6 TIMES -->
-<li>
-<a class="sponsor-logo tier-pink" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
-<img alt="McBride" src="images/McBride-Logo.png"/>
-</a>
-</li><!-- DUPLICATE 6 TIMES -->
-<li>
-<a class="sponsor-logo tier-pink" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
+<a class="sponsor-logo tier-gold" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
 <img alt="McBride" src="images/McBride-Logo.png"/>
 </a>
 </li>
-<!-- DUPLICATE 6 TIMES -->
 <li>
-<a class="sponsor-logo tier-pink" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
-<img alt="McBride" src="images/McBride-Logo.png"/>
+<a class="sponsor-logo tier-pink" href="https://polymaker.com/" rel="noopener" target="_blank">
+<img alt="Polymaker" src="images/Polymaker-Logo.png"/>
 </a>
-</li><!-- DUPLICATE 6 TIMES -->
+</li>
 <li>
-<a class="sponsor-logo tier-pink" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
-<img alt="McBride" src="images/McBride-Logo.png"/>
-</a>
-</li><!-- DUPLICATE 6 TIMES -->
-<li>
-<a class="sponsor-logo tier-pink" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
-<img alt="McBride" src="images/McBride-Logo.png"/>
-</a>
-</li><!-- DUPLICATE 6 TIMES -->
-<li>
-<a class="sponsor-logo tier-pink" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
-<img alt="McBride" src="images/McBride-Logo.png"/>
-</a>
-</li><!-- DUPLICATE 6 TIMES -->
-<li>
-<a class="sponsor-logo tier-pink" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
-<img alt="McBride" src="images/McBride-Logo.png"/>
-</a>
-</li><!-- DUPLICATE 6 TIMES -->
-<li>
-<a class="sponsor-logo tier-pink" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
-<img alt="McBride" src="images/McBride-Logo.png"/>
-</a>
-</li><!-- DUPLICATE 6 TIMES -->
-<li>
-<a class="sponsor-logo tier-pink" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
-<img alt="McBride" src="images/McBride-Logo.png"/>
-</a>
-</li><!-- DUPLICATE 6 TIMES -->
-<li>
-<a class="sponsor-logo tier-pink" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
-<img alt="McBride" src="images/McBride-Logo.png"/>
-</a>
-</li><!-- DUPLICATE 6 TIMES -->
-<li>
-<a class="sponsor-logo tier-pink" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
-<img alt="McBride" src="images/McBride-Logo.png"/>
-</a>
-</li><!-- DUPLICATE 6 TIMES -->
-<li>
-<a class="sponsor-logo tier-pink" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
-<img alt="McBride" src="images/McBride-Logo.png"/>
-</a>
-</li><!-- DUPLICATE 6 TIMES -->
-<li>
-<a class="sponsor-logo tier-pink" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
-<img alt="McBride" src="images/McBride-Logo.png"/>
-</a>
-</li><!-- DUPLICATE 6 TIMES -->
-<li>
-<a class="sponsor-logo tier-pink" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
+<a class="sponsor-logo tier-gold" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
 <img alt="McBride" src="images/McBride-Logo.png"/>
 </a>
 </li>
-</ul>
+<li>
+<a class="sponsor-logo tier-pink" href="https://polymaker.com/" rel="noopener" target="_blank">
+<img alt="Polymaker" src="images/Polymaker-Logo.png"/>
+</a>
+</li>
+<li>
+<a class="sponsor-logo tier-gold" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
+<img alt="McBride" src="images/McBride-Logo.png"/>
+</a>
+</li>
+<li>
+<a class="sponsor-logo tier-pink" href="https://polymaker.com/" rel="noopener" target="_blank">
+<img alt="Polymaker" src="images/Polymaker-Logo.png"/>
+</a>
+</li>
+<li>
+<a class="sponsor-logo tier-gold" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
+<img alt="McBride" src="images/McBride-Logo.png"/>
+</a>
+</li>
+<li>
+<a class="sponsor-logo tier-pink" href="https://polymaker.com/" rel="noopener" target="_blank">
+<img alt="Polymaker" src="images/Polymaker-Logo.png"/>
+</a>
+</li>
+<li>
+<a class="sponsor-logo tier-gold" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
+<img alt="McBride" src="images/McBride-Logo.png"/>
+</a>
+</li>
+<li>
+<a class="sponsor-logo tier-pink" href="https://polymaker.com/" rel="noopener" target="_blank">
+<img alt="Polymaker" src="images/Polymaker-Logo.png"/>
+</a>
+</li>
+<li>
+<a class="sponsor-logo tier-gold" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
+<img alt="McBride" src="images/McBride-Logo.png"/>
+</a>
+</li>
+<li>
+<a class="sponsor-logo tier-pink" href="https://polymaker.com/" rel="noopener" target="_blank">
+<img alt="Polymaker" src="images/Polymaker-Logo.png"/>
+</a>
+</li>
+<li>
+<a class="sponsor-logo tier-gold" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
+<img alt="McBride" src="images/McBride-Logo.png"/>
+</a>
+</li>
+<li>
+<a class="sponsor-logo tier-pink" href="https://polymaker.com/" rel="noopener" target="_blank">
+<img alt="Polymaker" src="images/Polymaker-Logo.png"/>
+</a>
+</li>
+<li>
+<a class="sponsor-logo tier-gold" href="https://mcbride.lbschools.net" rel="noopener" target="_blank">
+<img alt="McBride" src="images/McBride-Logo.png"/>
+</a>
+</li>
+    </ul>
     </div>
   </div>
 </section>
@@ -195,14 +344,13 @@
 <footer class="site-footer">
   <div class="footer-content">
     <div class="footer-left">
-      <a class="logo-link" href="./" aria-label="Home">
+      <a class="logo-link" href="../index.html" aria-label="Home">
         <div class="logo"></div>
       </a>
       <div>
-        <p class="footer-copy">© 2025 SoCal Alliance Robotics. All rights reserved.</p>
+        <p class="footer-copy">© 2025 SOCAL ALLIANCE ROBOTICS. ALL RIGHTS RESERVED.</p>
         <p class="footer-sub">
-          SoCal Alliance Robotics is a 501(c)(3) nonprofit public benefit organization based in California that provides
-          robotics education to children of all communities. Contact socalalliancenonprofit@gmail.com for any other questions.
+          SoCal Alliance Robotics is a 501(c)(3) nonprofit public benefit organization based in California that provides robotics education to children of all communities.
         </p>
       </div>
     </div>

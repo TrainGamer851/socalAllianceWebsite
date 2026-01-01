@@ -7,7 +7,7 @@
 }@media (max-width: 600px) {
   :root { --support-underline-overhang: 0; }
 }.sponsor-marquee { overflow-x: hidden; }/* === Extracted from index.html === */:root {
-      --hero-text-size: 36px;
+      --hero-text-size: 48px;
       --bar-radius: 12px;
       --stats-bar-max-width: 900px;
       --stats-bar-height: 150px;
@@ -33,20 +33,17 @@
       width: 100%;
       min-height: 320px;
       height: 675px;
-      background: url('../images/Banner.png') no-repeat;
-      background-size: cover;
-      background-position: 50% 15%;
       position: relative;
       display: block; /* Remove flex */
     }.subhead {
       position: absolute;
-      left: 0.5rem;
-      bottom: 0.5rem;
+      left: 10%;
+      bottom: 5rem;
       right: auto;
       top: auto;
       background: rgba(0,0,0,0.8);
       padding: 1.2em 1.5em;
-      max-width: 500px;
+      max-width: 450px;
       z-index: 2;
       margin: 0;
     }.btn-img img { height:40px; display:block; }/* STATS BAR IMAGE */.stats-btn img {
@@ -59,7 +56,7 @@
       transform: scale(1.05);
     }/* HERO 2 + ABOUT */.hero-2 {
       position:relative; width:100%; min-height:320px; height: auto; padding: 1px 0;
-      background:url('../images/flag.png') center/cover no-repeat;
+      background:url('../images/Flag.png') center/cover no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -72,13 +69,13 @@
       position: relative;
       width: 100%;
       max-width: 900px;
-      margin: 0 auto;
+      margin: 0 auto 0 5%;
       padding: 60px 40px;
       background:rgba(0,0,0,0.75);
       z-index:2;
       box-sizing:border-box;
       border-radius: 12px;
-    }.about .inner { max-width:900px; margin:0 auto; }.about h2 {
+    }.about .inner { max-width:900px; margin:0 auto; align-content: flex-start;}.about h2 {
       font:40px 'Tilt Warp',sans-serif; margin-bottom:16px;
     }.about p { font-size:18px; line-height:22px; margin-bottom:24px; }.founder {
       display:flex; align-items:center; gap:24px; flex-wrap:wrap;
@@ -147,7 +144,7 @@
   height: 100%;
   object-fit: contain;
   display: block;
-}/* pop & lift on hover */.sponsor-logo:hover { transform: translateY(0px) scale(1.1); box-shadow: 0 8px 20px rgba(0,0,0,.35); z-index: 10; filter: none !important; }/* outlines */.tier-yellow { border-color: #F9CB22; }.tier-orange { border-color: #EF7616; }.tier-pink   { border-color: #F0115F; }/* center title & gradient underline */.carousel-title {
+}/* pop & lift on hover */.sponsor-logo:hover { transform: translateY(0px) scale(1.1); box-shadow: 0 8px 20px rgba(0,0,0,.35); z-index: 10; filter: none !important; }/* outlines */.tier-gold { border-color: #F9CB22; }.tier-amber { border-color: #EF7616; }.tier-pink   { border-color: #F0115F; }/* center title & gradient underline */.carousel-title {
   display: inline-block;
   position: relative;
   color: #fff;
@@ -183,32 +180,42 @@
 }.hero-text {
   font-family: 'Tilt Warp', sans-serif;
   font-weight: 100;
-  font-size: 24px;   /* smaller global size */
+  font-size: 48px;
   line-height: 1.1;
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  left: auto;
-  bottom: auto;
-  margin: 0;
-  padding: 0.1em 0.1em;
-  text-align: right;
-  background: rgba(0, 0, 0, 0.7);
+  left: 50%;
+  top: 15%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 700px;
+  text-align: center;
   color: #fff;
-  border-radius: 0px;
   z-index: 2;
-  white-space: normal;
-  max-width: 60vw;
-}@media (max-width: 600px) {
+}
+@media (max-width: 600px) {
   .hero-text {
-    font-size: 18px; /* smaller on phones */
+    font-size: 32px; /* smaller on phones */
+  }
+}@media (max-width: 640px) {
+  .hero-text {
+    font-size: 28px; /* smaller on phones */
+    align-self: center;
+  }
+}@media (max-width: 900px) {
+  .hero-text {
+    font-size: 40px; /* smaller on phones */
   }
 }.subhead p {
-  font-size: 0.95rem;   /* smaller default size */
+  font-size: 1.5rem;   /* smaller default size */
   margin-bottom: 5px;
 }@media (max-width: 600px) {
   .subhead p {
-    font-size: 0.8rem;  /* even smaller on phones */
+    font-size: 1rem;  /* even smaller on phones */
+  }
+  .subhead {
+    max-width: 90%;   /* fit better on small screens */
+    margin-right: 7vw;
+    margin-left: 0vw;
   }
 }.logo {
   width: 81px;
@@ -216,11 +223,10 @@
   background: url('../images/logo.png') center/cover no-repeat;
   margin-right: 20px;
 }/* === Sponsor viewport shows 3 logos at a time === */.sponsor-viewport {
-
-  --s-logo-w: 150px;
+  --s-logo-w: 100vw;
   --s-gap: 1.5rem;
   /* exact 3 logos + 2 gaps area inside the padding */
-  width: calc(3 * var(--s-logo-w) + 2 * var(--s-gap));
+  width: calc(4 * var(--s-logo-w) + 1 * var(--s-gap));
   max-width: 100%;
   margin: 0 auto;
    /* gutters so edge logos aren't clipped */
@@ -250,8 +256,8 @@
 }.sponsor-logo {
   display: inline-block;
   flex: 0 0 auto;
-  width: var(--s-logo-w, 150px);
-  height: 100px;
+  width: 325px;
+  height: 325px;
   margin-top: 12px;      /* <-- pushes the whole box down */
   padding: 10px;
   border: 3px solid;
@@ -273,7 +279,7 @@
   .sponsor-viewport {
     width: calc(2 * var(--s-logo-w) + 1 * var(--s-gap));
   }
-}/* --- Tier border colors (last in cascade) --- */.sponsor-logo.tier-yellow { border-color: #F9CB22 !important; }.sponsor-logo.tier-orange { border-color: #EF7616 !important; }.sponsor-logo.tier-pink   { border-color: #F0115F !important; }/* === Extracted from index.html (style id="nav-left-hotfix") === *//* === NAV alignment + size hotfix (match index fix) === */
+}/* --- Tier border colors (last in cascade) --- */.sponsor-logo.tier-onyx { border-color: #2A2A2A !important; }.sponsor-logo.tier-amber { border-color: #EF7616 !important; }.sponsor-logo.tier-pink { border-color: #F0115F !important; } .sponsor-logo.tier-gold { border-color: #FFD700 !important; }/* === Extracted from index.html (style id="nav-left-hotfix") === *//* === NAV alignment + size hotfix (match index fix) === */
 
 
 /* ====== Founder mobile alignment & spacing (combined fix) ====== */
@@ -288,4 +294,342 @@
     margin-left: auto;
     margin-right: auto;
   }
+}
+.stats-section {
+  text-align: center;
+  margin: 4rem 0;
+  position: relative;
+}
+
+.stats-gradient {
+  height: 6px; /* line thickness */
+  background: linear-gradient(
+    90deg,
+    rgba(249,203,34,0.9) 23%,
+    rgba(239,118,22,0.9) 50%,
+    rgba(240,17,95,0.9) 77%
+  );
+  border-radius: 1000px;
+}
+.site-footer .logo {
+  background: url('../images/logo.png') center/cover no-repeat;
+}
+.site-footer .footer-copy {
+  font-size: 24px;
+  font-weight: 1000 !important;
+  margin: 0 0 8px 0;
+}
+.site-footer .footer-sub {
+  font-size: 18x;
+  font-weight: 1200 !important;
+  line-height: 16px;
+  opacity: 0.8;
+  margin-right: 2px;
+}
+/* ===== HERO SPLIT: 80% hero content + 20% newsletter ===== */
+.hero-1.hero-split{
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(260px, 1fr);
+  min-height: 675px;   /* keep minimum height */
+  height: auto;        /* allow newsletter to extend hero */
+  gap: 0;
+}
+
+/* Left column keeps your existing absolute placements */
+.hero-1 .hero-main{
+  position: relative;
+  height: 100%;
+  min-width: 0;
+}
+
+/* Right column becomes a normal grid cell (no overlay) */
+.hero-1.hero-split .discord-panel{
+  position: relative;     /* <- not absolute */
+  top: auto;
+  right: auto;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: rgba(0,0,0,0.92);
+  border-radius: 0;       /* looks like a clean right rail */
+  padding: 18px 16px;
+
+  z-index: 3;
+}
+
+/* Header stays fixed, list scrolls */
+.hero-1.hero-split .discord-panel h3{
+  flex: 0 0 auto;
+}
+
+/* Keep your existing inner styles (these can stay) */
+.discord-panel h3{
+  margin: 0 0 12px 0;
+  font-family: 'Instrument Sans', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: #fff;
+}
+
+.discord-announcements{
+  display: flex;
+  gap: 14px;
+  color: #fff;
+  flex: 1 1 auto;
+  flex-direction: column;
+  overflow-y: auto;
+  padding-right: 6px;
+  scroll-behavior: smooth;
+}
+
+.discord-post{
+  border-top: 1px solid rgba(255,255,255,0.12);
+  padding-top: 12px;
+}
+
+.discord-post:first-child{
+  border-top: none;
+  padding-top: 0;
+}
+
+.discord-text{
+  margin: 0 0 8px 0;
+  white-space: pre-wrap;
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.discord-time{
+  display: block;
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+/* Mobile: stack newsletter below hero */
+@media (max-width: 900px){
+  .hero-1.hero-split{
+    grid-template-columns: 1fr;
+    height: auto; /* let hero grow naturally */
+  }
+
+  .hero-1 .hero-main{
+    height: 675px; /* keep hero image height */
+  }
+
+  .hero-1.hero-split .discord-panel{
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    height: auto;
+    max-height: none;
+    padding: 18px 16px;
+  }
+
+  .hero-1 .subhead{
+    bottom: 0.25rem;   /* was 5rem */
+  }
+}
+
+.discord-panel a{
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.discord-panel a:hover{
+  opacity: 0.85;
+}
+
+.discord-post .discord-text{
+  max-height: 8.5em;     /* about ~6 lines */
+  overflow: hidden;
+}
+
+@media (max-width: 900px){
+  .hero-1.hero-split{
+    background-position: center 70%;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+}
+
+.hero-1 img {
+  object-position: 100% center; /* shift the crop toward the right */
+}
+
+.discord-images{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  margin: 10px 0 8px;
+  align-items: start; /* helps height:100% behave predictably */
+}
+
+/* Give each grid item a max height so children can use height: 100% */
+.discord-images > *{
+  max-height: 250px;
+}
+
+/* If your images are wrapped in <a>, make the wrapper behave like a grid item */
+.discord-images > a{
+  display: block;
+}
+
+/* Images + GIFs */
+.discord-img,
+.discord-gif{
+  width: 100%;
+  height: 200px;
+  max-height: 250px;
+  max-width: 100%;
+  display: block;
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+/* Videos MUST have width */
+.discord-video{
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  max-width: 100%;
+  display: block;
+  border-radius: 10px;
+  background: #000;
+  object-fit: contain;
+}
+
+/* Videos take the full row (optional, but usually looks best) */
+.discord-images video{
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  border-radius: 10px;
+  display: block;
+  background: #000;
+  object-fit: contain;
+  grid-column: 1 / -1;  /* <- full width row */
+}
+
+/* Desktop tweaks */
+@media (min-width: 900px){
+  .discord-images{
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .discord-images > *{
+    max-height: 180px;
+  }
+
+  .discord-img,
+  .discord-gif,
+  .discord-video{
+    max-height: 180px;
+  }
+}
+
+/* The right newsletter rail */
+.hero-1.hero-split .discord-panel{
+  display: flex;
+  flex-direction: column;
+  min-height: 0;            /* IMPORTANT: allows the child to scroll */
+}
+
+/* The scrolling list */
+.discord-announcements{
+  flex: 1 1 auto;
+  min-height: 0;            /* IMPORTANT: allows overflow scrolling */
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  /* choose one of these height caps */
+  max-height: 520px;        /* fixed cap */
+  /* OR: max-height: 70vh;  viewport-based cap */
+
+  padding-right: 6px;
+  scroll-behavior: smooth;
+}
+
+.discord-announcements::-webkit-scrollbar{
+  width: 10px;
+}
+.discord-announcements::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,0.18);
+  border-radius: 999px;
+}
+.discord-announcements::-webkit-scrollbar-thumb:hover{
+  background: rgba(255,255,255,0.28);
+}
+
+/* MP4/WebM "GIFs" */
+.discord-gif-video{
+  width: 100%;
+  height: 200px;
+  max-height: 250px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: transparent;
+  pointer-events: none; /* behaves like a GIF */
+}
+
+.discord-file{
+  display: inline-block;
+  padding: 10px 12px;
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.discord-file:hover{
+  background: rgba(255,255,255,0.10);
+}
+
+/* File attachments should span full width */
+.discord-images .discord-file{
+  grid-column: 1 / -1;
+}
+
+.discord-file{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 12px 14px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 12px;
+
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  text-decoration: none;
+
+  font-size: 14px;
+  line-height: 1.3;
+
+  /* wrapping behavior */
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* File icon */
+.discord-file::before{
+  content: "📄";
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.discord-file:hover{
+  background: rgba(255,255,255,0.14);
+}
+
+.hero-1{
+  background: none; /* IMPORTANT: stop sizing against full section height */
+}
+
+.hero-1 .hero-main{
+  background: url('../images/Landing.png') no-repeat center 70% / cover;
 }

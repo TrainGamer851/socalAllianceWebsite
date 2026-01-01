@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="../images/logo.png" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans&family=Tilt+Warp&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+  <!-- Keep existing shared styles -->
+  <link rel="stylesheet" href="../styles/nav.css" />
+  <link rel="stylesheet" href="../styles/footer.css" />
+  
+  <!-- Page-specific styles (rewritten to match Figma) -->
+  <link rel="stylesheet" href="../styles/ourteam.css" />
+  <title>Our Team — SoCal Alliance Robotics</title>
+</head>
+<body>
+  <!-- ========= NAV (unchanged) ========= -->
+  <header class="top-bar sca-nav" role="navigation">
+    <a class="logo-link" href="../index.html" aria-label="Home">
+      <div class="logo"></div>
+    </a>
+    <button type="button" class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="site-nav" style="position:relative;z-index:1000002;">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+    <div class="nav-backdrop" hidden></div>
+      <nav id="site-nav">
+        <a href="../about/index.html">ABOUT US</a>
+        <a href="../ourteam/index.html">OUR TEAM</a>
+        <a href="../projects/index.html">PROJECTS</a>
+        <a href="../support/index.html">SUPPORT US!</a>
+      </nav>
+  </header>
+
+  <!-- ========= OUR TEAM (hero) ========= -->
+  <section class="section hero">
+    <div class="section-bg" style="--bg:url('../images/Banner.png')"></div>
+    <div class="section-overlay"></div>
+
+    <div class="container hero-inner">
+      <h1 class="section-title left">OUR TEAM</h1>
+      <p class="section-copy left">
+        We’re a team built by VRC alumni with a shared passion for robotics, community, and growth. We started as an alliance between several Southern California high school teams and grew into a unified group who continue to build, compete, and give back to our community.
+        Collectively, we’ve earned every type of award VEX has to offer and many duplicates but our proudest award is the community we’ve built along the way. Now as a nonprofit, our mission is to help others experience that same growth and collaboration that shaped us. Locally, we mentor teams, volunteer at tournaments, and visit local schools to make robotics more accessible to everyone. Whether online or in person, we’re eager to give that helping hand to the next generation of VEX competitors.
+      </p>
+    </div>
+  </section>
+<div class="stats-gradient"></div>
+  <!-- ========= WHAT WE PROVIDE ========= -->
+  <section class="section provide">
+    <div class="section-bg" style="--bg:url('../images/Scateam.png')"></div>
+    <div class="section-overlay"></div>
+
+    <div class="container provide-inner">
+      <h2 class="section-title center">WHAT WE PROVIDE</h2>
+      <p class="section-copy center">
+        Our goal is to support teams, not outshine them. We mentor locally and online, helping students and teams grow their skills. Some of our members are dedicated coaches at schools, but we never limit our help to just those we work with directly. Anyone who reaches out deserves support, and we’re always ready to lend a hand. </br><br>
+        We create tutorials, build guides, and general VEX education content to make robotics knowledge more accessible. Our aim is to help others learn how to problem solve on their own without feeling overwhelmed or lost.</br><br>
+        Across the internet and in person, our members stay active in the community sharing, mentoring, and connecting with teams everywhere. VEX should be open, supportive, and built on the idea that no one should have to learn alone.
+      </p>
+    </div>
+  </section>
+
+  <!-- ========= FOOTER (unchanged) ========= -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-left">
+        <a class="logo-link" aria-label="Home" href="../index.html"><div class="logo"></div></a>
+        <div>
+          <p class="footer-copy">© 2025 SoCal Alliance Robotics. All rights reserved.</p>
+          <p class="footer-sub">SoCal Alliance Robotics is a 501(c)(3) nonprofit public benefit organization based in California that provides robotics education to children of all communities.</p>
+        </div>
+      </div>
+      <div class="footer-center">
+        <a aria-label="Donate now" href="../support/index.html"><img class="donate-img" src="../images/Donatewhite.png" alt="Donate Now" /></a>
+        <div class="footer-social" aria-label="Social links">
+          <a aria-label="Instagram" href="https://www.instagram.com/socal_robotics_alliance" target="_blank" rel="noopener"><img alt="Instagram" src="../images/SCA_INSTwhite.png" /></a>
+          <a aria-label="Email" href="https://docs.google.com/forms/d/e/1FAIpQLScGGJLw2yV9QkPJk8zACn_MSqXgCfeg9FaOOrdy1TTCh5fFEg/viewform" target="_blank" rel="noopener"><img alt="Email" src="../images/SCA_EMAILwhite.png" /></a>
+          <a aria-label="TikTok" href="https://www.tiktok.com/@sca_vexu" target="_blank" rel="noopener"><img alt="TikTok" src="../images/SCA_TIKTOKwhite.png" /></a>
+          <a aria-label="YouTube" href="https://www.youtube.com/@SCA_ORG" target="_blank" rel="noopener"><img alt="YouTube" src="../images/SCA_YOUTUBEwhite.png" /></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== JS: nav behavior (unchanged) + vertical scroll for quals ===== -->
+  <script>
+    // Hide-on-scroll nav (existing behavior)
+    (function(){
+      let lastY = window.scrollY;
+      const nav = document.querySelector('.top-bar');
+      if (!nav) return;
+      window.addEventListener('scroll', ()=>{
+        const y = window.scrollY;
+        nav.classList.toggle('hidden', y > lastY && y > 100);
+        lastY = y;
+      });
+    })();
+
+    // Mobile menu (existing)
+    (function(){
+      const header   = document.querySelector('.sca-nav');
+      const btn      = header && header.querySelector('.nav-toggle');
+      const nav      = header && header.querySelector('#site-nav');
+      const backdrop = header && header.querySelector('.nav-backdrop');
+      if (!header || !btn || !nav || !backdrop) return;
+      function placeMenu(){
+        const rect = header.getBoundingClientRect();
+        document.documentElement.style.setProperty('--sca-nav-bottom', Math.max(0, rect.bottom) + 'px');
+      }
+      function openMenu(){ placeMenu(); nav.classList.add('open'); btn.setAttribute('aria-expanded','true'); backdrop.hidden = false; document.body.classList.add('menu-open'); }
+      function closeMenu(){ nav.classList.remove('open'); btn.setAttribute('aria-expanded','false'); backdrop.hidden = true; document.body.classList.remove('menu-open'); }
+      btn.addEventListener('click', () => nav.classList.contains('open') ? closeMenu() : openMenu());
+      backdrop.addEventListener('click', closeMenu);
+      nav.addEventListener('click', e => { if (e.target.tagName === 'A') closeMenu(); });
+      window.addEventListener('resize', placeMenu, {passive:true});
+      window.addEventListener('scroll', placeMenu,  {passive:true});
+      placeMenu();
+    })();
+
+    // Vertical scroll buttons for qualifications
+    (function(){
+      const v = document.getElementById('qualsViewport');
+      if(!v) return;
+      const up = document.querySelector('.quals .arrow.up');
+      const dn = document.querySelector('.quals .arrow.down');
+      const step = 220; // roughly one card height
+      up.addEventListener('click', ()=> v.scrollBy({top:-step, behavior:'smooth'}));
+      dn.addEventListener('click', ()=> v.scrollBy({top: step, behavior:'smooth'}));
+    })();
+  </script>
+</body>
+</html>

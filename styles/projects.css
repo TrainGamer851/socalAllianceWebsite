@@ -11,11 +11,16 @@
     line-height: 1.2;
   }
 }/* === Projects buttons: consistent fit & alignment === */.features { align-items: stretch; }.feature { position: relative; }/* Ensure inner content uses equal padding and sits on the bottom */.feature .copy{
-  padding: clamp(16px, 4vw, 26px) !important;
+  position: relative;
+  z-index: 2;
+  height: 100%;  
   display: flex !important;
   flex-direction: column !important;
-  justify-content: flex-end !important;
-  height: 100% !important;
+  justify-content: center !important;   /* ⬅ centers vertically */
+  align-items: center !important;       /* ⬅ centers horizontally */
+  text-align: center !important;
+  gap: 14px;
+  padding: 20px;
 }/* Remove extra spacing around the heading and keep the box centered */.feature h3{ margin: 0 !important; }/* Make the button box fit within its tile with equal padding */.feature-btn{
   display: block !important;
   width: 100% !important;
@@ -72,7 +77,7 @@
   object-fit: cover;
 }.feature::before{
       content:"";position:absolute;inset:0;
-      background:linear-gradient(to top,rgba(0,0,0,.55),rgba(0,0,0,.25));z-index:1
+      z-index:1
     }.feature img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.95) brightness(.85)}.feature .copy{
       position:relative;z-index:2;color:#fff;padding:26px;display:flex;flex-direction:column;gap:10px;height:100%;justify-content:flex-end
     }.feature h3{font-family:'Tilt Warp',system-ui,sans-serif;font-size:clamp(22px,3.2vw,30px);letter-spacing:.3px}.feature p{opacity:.9;max-width:52ch}/* TIMELINE SECTION *//* 1) Choose one unified X-offset for line & arrows *//* 1) Define shared positions on the .timeline container */.timeline {
@@ -333,4 +338,122 @@
     rgba(240,17,95,0.9) 77%
   );
   border-radius: var(--partnerships-underline-radius, 1000px);
+}
+
+.stats-section {
+  text-align: center;
+  margin: 4rem 0;
+  position: relative;
+}
+
+.stats-gradient {
+  height: 6px; /* line thickness */
+  background: linear-gradient(
+    90deg,
+    rgba(249,203,34,0.9) 23%,
+    rgba(239,118,22,0.9) 50%,
+    rgba(240,17,95,0.9) 77%
+  );
+  border-radius: 1000px;
+}
+.site-footer .logo {
+  background: url('../images/logo.png') center/cover no-repeat;
+}
+.site-footer .footer-copy {
+  font-size: 24px;
+  font-weight: 1000 !important;
+  margin: 0 0 8px 0;
+}
+.site-footer .footer-sub {
+  font-size: 18x;
+  font-weight: 1200 !important;
+  line-height: 16px;
+  opacity: 0.8;
+  margin-right: 2px;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+}
+.feature {
+  position: relative;
+  min-height: 500px;
+  overflow: hidden;
+}
+.feature::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  background: transparent; /* removed dark overlay */
+  z-index:1;
+}
+.feature .copy {
+  justify-content: flex-end;
+  padding: 26px;
+}
+.feature-btn {
+  font-family: 'Tilt Warp', sans-serif;
+  font-size: clamp(22px,3vw,36px);
+  background: rgba(0,0,0,0.4);
+  border-image: linear-gradient(90deg, #F9CB22 23%, #EF7616 50%, #F0115F 77%) 1;
+}
+
+.feature .copy p {
+  font-size: 1.15rem !important;       /* smaller text */
+  line-height: 1.25 !important;       /* tighter spacing */
+  max-width: 90% !important;          /* prevent wide paragraphs */
+  margin-top: 6px !important;         /* small spacing from button */
+  text-align: center !important;      /* keep centered below button */
+}
+
+
+@media (max-width: 480px){
+  .feature-btn {
+    font-size: 1rem !important;      /* caps size so text never overflows */
+    padding: 0.65em 1em !important;  /* reduces box size */
+    white-space: normal !important;  /* ensures wrapping */
+    line-height: 1.2 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 10px !important;
+  }
+}
+
+/* === FINAL MOBILE BUTTON FIX === */
+@media (max-width: 600px){
+  .feature-btn {
+    font-size: 0.85rem !important;   /* smaller text */
+    padding: 0.55em 0.9em !important; /* smaller button box */
+    line-height: 1.15 !important;
+    max-width: 90% !important;        /* keeps long text from stretching */
+    white-space: normal !important;   /* ALWAYS allow wrapping */
+    word-break: break-word !important;
+    font-size: 12px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  .feature .copy p {
+    font-size: 0.8rem !important;       /* smaller text */
+    line-height: 1.25 !important;       /* tighter spacing */
+    max-width: 90% !important;          /* prevent wide paragraphs */
+    margin-top: 6px !important;         /* small spacing from button */
+    text-align: center !important;      /* keep centered below button */
+  }
+}
+
+/* ultra-small phones (iPhone SE, Galaxy Mini, etc.) */
+@media (max-width: 380px){
+  .feature-btn {
+    font-size: 0.75rem !important;
+    padding: 0.45em 0.8em !important;
+    font-size: 8px !important;
+  }
+  .feature .copy p {
+    font-size: 0.72rem !important;
+    line-height: 1.2 !important;
+  }
 }
